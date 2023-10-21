@@ -7,11 +7,21 @@
 
 import SwiftUI
 
+
 @main
 struct LittleLemonAppsApp: App {
+    let persistenceController = PersistenceController.shared
+    @StateObject var loginManager = LoginManager()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if loginManager.isLoggedIn {
+                HomeView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            } else {
+                OnBoardingView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            }
         }
     }
 }
